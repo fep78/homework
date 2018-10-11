@@ -11,6 +11,14 @@ GUID=$1
 REPO=$2
 CLUSTER=$3
 echo "Setting up Jenkins in project ${GUID}-jenkins from Git Repo ${REPO} for Cluster ${CLUSTER}"
+whoami
+which docker
+which oc
+which sudo
+ls -l /bin
+ls -l /sbin
+ls -l /usr
+ls -l /usr/bin
 
 # Code to set up the Jenkins project to execute the
 # three pipelines.
