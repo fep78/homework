@@ -8,7 +8,7 @@ items:
     source:
       type: "Git"
       git:
-        uri: "https://github.com/fep78/homeworkhttps://github.com/fep78/homework"
+        uri: "https://github.com/fep78/homework"
         contextDir: "MLBParks"
     strategy:
       type: "JenkinsPipeline"

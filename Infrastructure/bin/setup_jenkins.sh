@@ -11,14 +11,6 @@ GUID=$1
 REPO=$2
 CLUSTER=$3
 echo "Setting up Jenkins in project ${GUID}-jenkins from Git Repo ${REPO} for Cluster ${CLUSTER}"
-whoami
-which docker
-which oc
-which sudo
-ls -l /bin
-ls -l /sbin
-ls -l /usr
-ls -l /usr/bin
 
 # Code to set up the Jenkins project to execute the
 # three pipelines.
@@ -86,7 +78,6 @@ EOF
 /usr/bin/docker push docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
 
 # sudo
-exit
 
 # create jenkins pipelines using custom image
 cat ../templates/mlbparks-jenkins.yaml      | oc create -f - -n ${GUID}-jenkins
