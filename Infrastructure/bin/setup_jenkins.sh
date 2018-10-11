@@ -78,7 +78,7 @@ docker login -u ${GUID} -p $(oc whoami -t) docker-registry-default.apps.${CLUSTE
 docker push docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
 
 # create jenkins pipelines using custom image
-cat mlbparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
-cat nationalparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
-cat parksmap-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
+cat ../templates/mlbparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
+cat ../templates/nationalparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
+cat ../templates/parksmap-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
 
