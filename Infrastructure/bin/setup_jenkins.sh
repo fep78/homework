@@ -32,7 +32,7 @@ oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi
 #oc set resources dc jenkins --limits=memory=2Gi,cpu=2 --requests=memory=2Gi,cpu=2
 
 # custom maven image
-sudo -i
+/usr/bin/sudo -i
 cat > /etc/containers/registries.conf << EOF
 # This is a system-wide configuration file used to
 # keep track of registries for various container backends.
@@ -61,8 +61,8 @@ registries = ['docker-registry-default.apps.${CLUSTER}']
 registries = []
 EOF
 
-systemctl enable docker
-systemctl restart docker
+/usr/bin/systemctl enable docker
+/usr/bin/systemctl restart docker
 
 mkdir $HOME/jenkins-slave-appdev
 cd  $HOME/jenkins-slave-appdev
@@ -73,12 +73,15 @@ RUN yum -y install skopeo apb && \
     yum clean all
 USER 1001
 EOF
-docker build . -t docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
-docker login -u ${GUID} -p $(oc whoami -t) docker-registry-default.apps.${CLUSTER}
-docker push docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
+/usr/bin/docker build . -t docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
+/usr/bin/docker login -u ${GUID} -p $(oc whoami -t) docker-registry-default.apps.${CLUSTER}
+/usr/bin/docker push docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
+
+# sudo
+exit
 
 # create jenkins pipelines using custom image
-cat ../templates/mlbparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
-cat ../templates/nationalparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
-cat ../templates/parksmap-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
+cat ../templates/mlbparks-jenkins.yaml      | oc create -f - -n ${GUID}-jenkins
+cat ../templates/nationalparks-jenkins.yaml | oc create -f - -n ${GUID}-jenkins
+cat ../templates/parksmap-jenkins.yaml      | oc create -f - -n ${GUID}-jenkins
 
