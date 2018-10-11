@@ -78,44 +78,7 @@ docker login -u ${GUID} -p $(oc whoami -t) docker-registry-default.apps.${CLUSTE
 docker push docker-registry-default.apps.${CLUSTER}/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
 
 # create jenkins pipelines using custom image
-# docker-registry.default.svc:5000/${GUID}-jenkins/jenkins-slave-maven-appdev:v3.9
-
-cat > mlbparks-pipeline.yaml << EOF
-kind: "BuildConfig"
-apiVersion: "v1"
-metadata:
-  name: "${GUID}-mlbparks-pipeline"
-spec:
-  strategy:
-    jenkinsPipelineStrategy:
-      jenkinsfile: |-
-        // path of the template to use
-        def templatePath = 'oc-mlbparks-template.json'
-        // name of the template that will be created
-        def templateName = 'mlbparks'
-        // NOTE, the "pipeline" directive/closure from the declarative pipeline syntax needs to include, or be nested outside,
-        // and "openshift" directive/closure from the OpenShift Client Plugin for Jenkins.  Otherwise, the declarative pipeline engine
-        // will not be fully engaged.
-        pipeline {
-            agent {
-              node('maven-appdev') {
-                // spin up a node.js slave pod to run this build on
-                def mvnCmd = "mvn -s ./nexus_openshift_settings.xml"
-		            def groupId = ${GUID}
-		            def cluster = ${CLUSTER}
-              }
-            }
-            options {
-                // set a timeout of 20 minutes for this pipeline
-                timeout(time: 20, unit: 'MINUTES')
-            }
-            stages {
-							stage('Build war') {
-							  echo "Building war"
-							}
-            } // stages
-        } // pipeline
-      type: JenkinsPipeline
-EOF
 cat mlbparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
+cat nationalparks-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
+cat parksmap-pipeline.yaml | oc create -f - -n ${GUID}-jenkins
 
